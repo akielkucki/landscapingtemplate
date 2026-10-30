@@ -1,0 +1,232 @@
+@import 'tailwindcss';
+
+/*
+ * Theme tokens. Colours, fonts and radii come from the active site.json at
+ * runtime: src/lib/theme.ts writes --c-*, --f-* and --r-* onto :root, and
+ * these map them onto Tailwind (bg-brand, text-ink-soft, font-display, rounded-card…).
+ */
+@theme inline {
+	--color-paper: var(--c-paper);
+	--color-cream: var(--c-cream);
+	--color-sand: var(--c-sand);
+	--color-ink: var(--c-ink);
+	--color-ink-soft: var(--c-ink-soft);
+	--color-brand: var(--c-brand);
+	--color-brand-press: var(--c-brand-press);
+	--color-brand-on-dark: var(--c-brand-on-dark);
+	--color-on-brand: var(--c-on-brand);
+	--color-deep: var(--c-deep);
+	--color-deep-stripe: var(--c-deep-stripe);
+	--color-charcoal: var(--c-charcoal);
+	--color-charcoal-deep: var(--c-charcoal-deep);
+	--color-accent: var(--c-accent);
+	--color-accent-ink: var(--c-accent-ink);
+	--color-accent-on-dark: var(--c-accent-on-dark);
+	--color-alert: var(--c-alert);
+	--color-on-dark: var(--c-on-dark);
+	--color-on-dark-soft: var(--c-on-dark-soft);
+	--color-rule-dark: var(--c-rule-dark);
+	--color-card: var(--c-card);
+	--color-field: var(--c-field);
+	--color-field-hover: var(--c-field-hover);
+	--color-earth: var(--c-earth);
+	--color-earth-stripe: var(--c-earth-stripe);
+
+	--font-display: var(--f-display);
+	--font-sans: var(--f-body);
+
+	--radius-ui: var(--r-ui);
+	--radius-card: var(--r-card);
+
+	--spacing-header: var(--header-h);
+}
+
+/* Layout and type scale shared by every business. */
+@theme {
+	--breakpoint-xs: 35rem;
+
+	--spacing-gutter: clamp(16px, 4vw, 40px);
+	--spacing-section: clamp(72px, 10vw, 136px);
+
+	--text-section: clamp(2.6rem, 5.4vw, 4.4rem);
+	--text-section--line-height: 0.98;
+	--text-lede: clamp(1.125rem, 1.6vw, 1.3rem);
+	--text-lede--line-height: 1.55;
+
+	--ease-site: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+	--animate-draw: draw 0.9s 0.35s var(--ease-site) forwards;
+
+	@keyframes draw {
+		to {
+			stroke-dashoffset: 0;
+		}
+	}
+}
+
+/* `on-dark:` styles an element inside a dark section (any ancestor with .on-dark). */
+@custom-variant on-dark (&:where(.on-dark, .on-dark *));
+
+/* Centred content column with the page gutter. */
+@utility wrap {
+	width: 100%;
+	max-width: calc(1240px + var(--spacing-gutter) * 2);
+	margin-inline: auto;
+	padding-inline: var(--spacing-gutter);
+}
+
+/* Freshly mowed lawn stripes for dark sections ("texture": "flat" in site.json turns them off). */
+@utility mow-stripes {
+	background-color: var(--c-deep);
+	background-image: repeating-linear-gradient(100deg, var(--c-deep) 0 72px, var(--c-deep-stripe) 72px 144px);
+}
+
+@utility mow-stripes-sm {
+	background-color: var(--c-deep);
+	background-image: repeating-linear-gradient(100deg, var(--c-deep) 0 56px, var(--c-deep-stripe) 56px 112px);
+}
+
+@utility earth-stripes {
+	background-color: var(--c-earth);
+	background-image: repeating-linear-gradient(100deg, var(--c-earth) 0 56px, var(--c-earth-stripe) 56px 112px);
+}
+
+@layer base {
+	:root {
+		--header-h: 84px;
+		color-scheme: light;
+	}
+
+	@media (width < 64rem) {
+		:root {
+			--header-h: 70px;
+		}
+	}
+
+	html {
+		-webkit-text-size-adjust: 100%;
+		text-size-adjust: 100%;
+		scroll-padding-top: calc(var(--header-h) + 16px);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		html {
+			scroll-behavior: smooth;
+		}
+	}
+
+	body {
+		background: var(--c-paper);
+		color: var(--c-ink);
+		font-family: var(--f-body);
+		font-size: 1.0625rem;
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+		overflow-x: clip;
+	}
+
+	@media (width >= 56.25rem) {
+		body {
+			font-size: 1.125rem;
+		}
+	}
+
+	/* Room for the fixed call / quote bar on phones. */
+	@media (width < 48rem) {
+		body {
+			padding-bottom: calc(70px + env(safe-area-inset-bottom));
+		}
+	}
+
+	h1,
+	h2,
+	h3,
+	h4 {
+		font-family: var(--f-display);
+		font-weight: 700;
+		line-height: 0.98;
+		letter-spacing: -0.005em;
+		text-wrap: balance;
+	}
+
+	p {
+		text-wrap: pretty;
+	}
+
+	:focus-visible {
+		outline: 3px solid var(--c-accent);
+		outline-offset: 3px;
+	}
+
+	::selection {
+		background: var(--c-accent);
+		color: var(--c-ink);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+		}
+	}
+}
+
+@layer components {
+	/* Text inputs, selects and textareas in every form. */
+	.field-input {
+		width: 100%;
+		min-height: 50px;
+		padding: 12px 14px;
+		border: 1px solid var(--c-field);
+		border-radius: var(--r-ui);
+		background: var(--c-card);
+		color: var(--c-ink);
+		font-size: 1rem;
+		line-height: 1.4;
+		transition:
+			border-color 0.15s,
+			box-shadow 0.15s;
+
+		&:hover {
+			border-color: var(--c-field-hover);
+		}
+
+		&:focus {
+			outline: none;
+			border-color: var(--c-brand);
+			box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-brand) 22%, transparent);
+		}
+
+		&[aria-invalid='true'] {
+			border-color: var(--c-alert);
+		}
+	}
+
+	textarea.field-input {
+		min-height: 120px;
+		resize: vertical;
+	}
+
+	select.field-input {
+		appearance: none;
+		padding-right: 40px;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%234d5550' stroke-width='2'/%3E%3C/svg%3E");
+		background-repeat: no-repeat;
+		background-position: right 16px center;
+	}
+
+	/* Scroll reveal (see src/lib/reveal.ts): only applied by JS, never under reduced motion. */
+	.reveal {
+		transition:
+			opacity 0.6s var(--ease-site),
+			transform 0.6s var(--ease-site);
+	}
+
+	.reveal-pending {
+		opacity: 0;
+		transform: translateY(16px);
+	}
+}

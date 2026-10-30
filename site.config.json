@@ -1,0 +1,4 @@
+{
+	"$comment": "Which folder in sites/ to build. The SITE environment variable overrides this.",
+	"site": "rds-total-lawn"
+}

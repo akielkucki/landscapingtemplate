@@ -1,0 +1,17 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	// `npm run deploy` overrides this with deploy.workerName from the active site.json.
+	"name": "landscaping-template",
+	// Built by @sveltejs/adapter-cloudflare (npm run build).
+	"main": ".svelte-kit/cloudflare/_worker.js",
+	"compatibility_date": "2026-10-23",
+	"compatibility_flags": ["nodejs_als"],
+	"assets": {
+		"binding": "ASSETS",
+		"directory": ".svelte-kit/cloudflare"
+	},
+	// Quote and job-application submissions are logged here until they're wired to email.
+	"observability": {
+		"enabled": true
+	}
+}
